@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { getAdminApplications, getAdminStats } from '@/api'
 import Navbar from '@/components/shared/Navbar'
 
@@ -94,6 +95,14 @@ const StatCard = ({ label, value, sub }: { label: string; value: string | number
 )
 
 const AdminPanel = () => {
+  const navigate = useNavigate()
+
+  const logout = () => {
+    localStorage.removeItem('lds_token')
+    localStorage.removeItem('lds_user')
+    navigate('/login', { replace: true })
+  }
+
   const [apps, setApps] = useState<Application[]>([])
   const [stats, setStats] = useState<Stats | null>(null)
   const [filter, setFilter] = useState<Filter>('ALL')
@@ -119,10 +128,18 @@ const AdminPanel = () => {
 
       <div className="max-w-6xl mx-auto px-6 py-10">
         {/* Header */}
-        <div className="mb-8">
-          <p className="text-xs font-medium text-neutral-400 uppercase tracking-wider mb-1">Dashboard</p>
-          <h1 className="text-2xl font-semibold text-neutral-900 tracking-tight">Admin Panel</h1>
-          <p className="text-sm text-neutral-400 mt-1">All loan applications and decisions</p>
+        <div className="mb-8 flex items-start justify-between">
+          <div>
+            <p className="text-xs font-medium text-neutral-400 uppercase tracking-wider mb-1">Dashboard</p>
+            <h1 className="text-2xl font-semibold text-neutral-900 tracking-tight">Admin Panel</h1>
+            <p className="text-sm text-neutral-400 mt-1">All loan applications and decisions</p>
+          </div>
+          <button
+            onClick={logout}
+            className="px-3 py-1.5 text-xs font-medium text-neutral-500 border border-neutral-200 rounded-lg hover:bg-neutral-100 hover:text-neutral-900 transition-colors"
+          >
+            Sign out
+          </button>
         </div>
 
         {/* Stats */}

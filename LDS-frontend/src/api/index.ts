@@ -5,13 +5,30 @@ const api = axios.create({
   headers: { 'Content-Type': 'application/json' },
 })
 
+// Attach JWT token on every request if present
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem('lds_token')
+  if (token) config.headers.Authorization = `Bearer ${token}`
+  return config
+})
+
 api.interceptors.response.use(
   (response) => response,
   (error) => {
     const message = error.response?.data?.error?.message || 'Something went wrong'
+    // Token expired or invalid — clear and redirect to login
+    if (error.response?.status === 401) {
+      localStorage.removeItem('lds_token')
+      localStorage.removeItem('lds_user')
+      window.location.href = '/login'
+    }
     return Promise.reject(new Error(message))
   }
 )
+
+// --- Auth ---
+export const loginUser = (data: { username: string; password: string }) =>
+  api.post('/auth/login', data)
 
 // --- Profile ---
 export const createProfile = (data: {

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { getAdminApplications, getAdminStats, getAdminAuditLogs } from '@/api'
 import Navbar from '@/components/shared/Navbar'
 
@@ -73,6 +74,13 @@ const MetricCard = ({
 
 const SuperAdminPanel = () => {
   const [tab, setTab] = useState<Tab>('overview')
+  const navigate = useNavigate()
+  const logout = () => {
+    localStorage.removeItem('lds_token')
+    localStorage.removeItem('lds_user')
+    navigate('/login', { replace: true })
+  }
+
   const [apps, setApps] = useState<Application[]>([])
   const [stats, setStats] = useState<Stats | null>(null)
   const [auditLogs, setAuditLogs] = useState<AuditLog[]>([])
@@ -116,7 +124,15 @@ const SuperAdminPanel = () => {
             <h1 className="text-2xl font-semibold text-neutral-900 tracking-tight">Super Admin</h1>
             <p className="text-sm text-neutral-400 mt-1">Full system visibility — applications, scoring, audit trail</p>
           </div>
-          <span className="px-3 py-1 rounded-full text-xs font-semibold bg-blue-600 text-white">SUPERADMIN</span>
+          <div className="flex items-center gap-2">
+            <span className="px-3 py-1 rounded-full text-xs font-semibold bg-blue-600 text-white">SUPERADMIN</span>
+            <button
+              onClick={logout}
+              className="px-3 py-1.5 text-xs font-medium text-neutral-500 border border-neutral-200 rounded-lg hover:bg-neutral-100 hover:text-neutral-900 transition-colors"
+            >
+              Sign out
+            </button>
+          </div>
         </div>
 
         {/* Tabs */}
