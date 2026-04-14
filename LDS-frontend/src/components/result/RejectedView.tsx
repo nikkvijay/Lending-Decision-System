@@ -1,4 +1,4 @@
-import { DecisionResult } from '@/contexts/ApplicationContext'
+import type { DecisionResult } from '@/contexts/ApplicationContext'
 import ScoreGauge from './ScoreGauge'
 import ReasonCodeBadge from './ReasonCodeBadge'
 

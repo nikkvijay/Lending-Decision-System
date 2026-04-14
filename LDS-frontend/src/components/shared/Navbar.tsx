@@ -4,14 +4,12 @@ const Navbar = () => (
       <div className="flex items-center gap-2.5">
         <div className="w-2 h-2 rounded-full bg-neutral-900" />
         <span className="text-sm font-semibold tracking-tight text-neutral-900">
-          Vitto LDS
+          Lending Decision System
         </span>
       </div>
-      <span className="text-xs text-neutral-400 font-medium">
-        MSME Credit
-      </span>
+      <span className="text-xs text-neutral-400 font-medium">MSME Credit</span>
     </div>
   </header>
-)
+);
 
-export default Navbar
+export default Navbar;

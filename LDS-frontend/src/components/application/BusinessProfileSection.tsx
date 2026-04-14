@@ -41,6 +41,7 @@ const BusinessProfileSection = ({ formData, onChange, errors }: Props) => (
           onChange={(e) => onChange('pan', e.target.value.toUpperCase())}
           placeholder="ABCDE1234F"
           maxLength={10}
+          autoComplete="off"
           className={inputClass}
         />
       </FormField>
