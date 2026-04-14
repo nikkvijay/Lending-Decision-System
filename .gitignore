@@ -1,0 +1,11 @@
+node_modules/
+.env
+.env.production
+dist/
+*.log
+.vercel/
+.claude/
+
+# Assessment docs (local only)
+*.pdf
+project details.txt
