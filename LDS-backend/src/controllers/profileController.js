@@ -20,4 +20,24 @@ const getProfile = async (req, res, next) => {
   }
 }
 
-module.exports = { createProfile, getProfile }
+const deleteProfile = async (req, res, next) => {
+  try {
+    const { id } = req.params
+    const hard = req.query.hard === 'true'
+
+    const found = hard
+      ? await profileService.hardDeleteProfile(id)
+      : await profileService.softDeleteProfile(id)
+
+    if (!found) throw new AppError('Profile not found', 404, 'PROFILE_NOT_FOUND')
+
+    res.status(200).json({
+      success: true,
+      data: { id, deleted: true, type: hard ? 'hard' : 'soft' },
+    })
+  } catch (err) {
+    next(err)
+  }
+}
+
+module.exports = { createProfile, getProfile, deleteProfile }

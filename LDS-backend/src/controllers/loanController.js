@@ -20,4 +20,24 @@ const getLoan = async (req, res, next) => {
   }
 }
 
-module.exports = { createLoan, getLoan }
+const deleteLoan = async (req, res, next) => {
+  try {
+    const { id } = req.params
+    const hard = req.query.hard === 'true'
+
+    const found = hard
+      ? await loanService.hardDeleteLoan(id)
+      : await loanService.softDeleteLoan(id)
+
+    if (!found) throw new AppError('Loan not found', 404, 'LOAN_NOT_FOUND')
+
+    res.status(200).json({
+      success: true,
+      data: { id, deleted: true, type: hard ? 'hard' : 'soft' },
+    })
+  } catch (err) {
+    next(err)
+  }
+}
+
+module.exports = { createLoan, getLoan, deleteLoan }

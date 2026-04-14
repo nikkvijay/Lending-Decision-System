@@ -2,13 +2,14 @@ const { pool } = require('../config/postgres')
 const AuditLog = require('../models/mongo/AuditLog')
 
 const getApplications = async (filter = 'ALL') => {
+  const base = 'WHERE bp.is_deleted = FALSE AND la.is_deleted = FALSE'
   const conditions = {
-    ALL:        '',
-    APPROVED:   "WHERE dr.decision = 'APPROVED'",
-    REJECTED:   "WHERE dr.decision = 'REJECTED'",
-    PENDING:    "WHERE dr.status IN ('PENDING', 'PROCESSING')",
+    ALL:      base,
+    APPROVED: `${base} AND dr.decision = 'APPROVED'`,
+    REJECTED: `${base} AND dr.decision = 'REJECTED'`,
+    PENDING:  `${base} AND dr.status IN ('PENDING', 'PROCESSING')`,
   }
-  const where = conditions[filter] || ''
+  const where = conditions[filter] || base
 
   const result = await pool.query(`
     SELECT
