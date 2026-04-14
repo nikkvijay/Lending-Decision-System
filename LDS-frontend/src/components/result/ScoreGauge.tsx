@@ -2,7 +2,6 @@ import { getScoreColor, getScoreLabel } from '@/utils/formatters'
 
 interface Props {
   score: number
-  decision: 'APPROVED' | 'REJECTED'
 }
 
 const ScoreGauge = ({ score }: Props) => {
@@ -12,39 +11,36 @@ const ScoreGauge = ({ score }: Props) => {
   const color = getScoreColor(score)
   const label = getScoreLabel(score)
 
-  const r = 70
-  const cx = 100
-  const cy = 90
+  const r = 64
+  const cx = 80
+  const cy = 80
   const arcLength = Math.PI * r
   const progress = pct * arcLength
 
-  const x1 = cx - r
-  const y1 = cy
-  const x2 = cx + r
-  const y2 = cy
-
   return (
-    <div className="flex flex-col items-center">
-      <svg viewBox="0 0 200 110" className="w-52 h-28">
+    <div className="flex flex-col items-center py-2">
+      <svg viewBox="0 0 160 100" className="w-44 h-28">
+        {/* Track */}
         <path
-          d={`M ${x1} ${y1} A ${r} ${r} 0 0 1 ${x2} ${y2}`}
+          d={`M ${cx - r} ${cy} A ${r} ${r} 0 0 1 ${cx + r} ${cy}`}
           fill="none"
-          stroke="#e5e7eb"
-          strokeWidth="12"
+          stroke="#e5e5e5"
+          strokeWidth="10"
           strokeLinecap="round"
         />
+        {/* Progress */}
         <path
-          d={`M ${x1} ${y1} A ${r} ${r} 0 0 1 ${x2} ${y2}`}
+          d={`M ${cx - r} ${cy} A ${r} ${r} 0 0 1 ${cx + r} ${cy}`}
           fill="none"
           stroke={color}
-          strokeWidth="12"
+          strokeWidth="10"
           strokeLinecap="round"
           strokeDasharray={`${progress} ${arcLength}`}
         />
       </svg>
-      <div className="text-center -mt-4">
-        <p className="text-4xl font-bold" style={{ color }}>{score}</p>
-        <p className="text-sm text-gray-500 mt-0.5">{label} Credit Score</p>
+      <div className="text-center -mt-6">
+        <p className="text-5xl font-bold tracking-tight" style={{ color }}>{score}</p>
+        <p className="text-xs text-neutral-400 mt-1 font-medium uppercase tracking-wider">{label}</p>
       </div>
     </div>
   )

@@ -3,6 +3,7 @@ import FormField from './FormField'
 interface Props {
   formData: Record<string, string>
   onChange: (field: string, value: string) => void
+  errors: Record<string, string>
 }
 
 const BUSINESS_TYPES = [
@@ -13,71 +14,73 @@ const BUSINESS_TYPES = [
 ]
 
 const inputClass =
-  'w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-900'
+  'w-full bg-white border border-neutral-200 rounded-lg px-3 py-2.5 text-sm text-neutral-900 placeholder:text-neutral-400 focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900 transition-colors'
 
-const BusinessProfileSection = ({ formData, onChange }: Props) => (
+const BusinessProfileSection = ({ formData, onChange, errors }: Props) => (
   <div className="space-y-4">
-    <h2 className="text-lg font-semibold text-gray-800">Business Profile</h2>
+    <div>
+      <h2 className="text-sm font-semibold text-neutral-900">Business Profile</h2>
+      <p className="text-xs text-neutral-400 mt-0.5">Owner and business details</p>
+    </div>
 
-    <FormField label="Owner Name" required>
-      <input
-        type="text"
-        value={formData.ownerName}
-        onChange={(e) => onChange('ownerName', e.target.value)}
-        placeholder="Full name of business owner"
-        className={inputClass}
-        required
-      />
-    </FormField>
+    <div className="grid grid-cols-2 gap-4">
+      <FormField label="Owner Name" required error={errors.ownerName}>
+        <input
+          type="text"
+          value={formData.ownerName}
+          onChange={(e) => onChange('ownerName', e.target.value)}
+          placeholder="Rajesh Kumar"
+          className={inputClass}
+        />
+      </FormField>
 
-    <FormField label="PAN" required hint="Format: ABCDE1234F">
-      <input
-        type="text"
-        value={formData.pan}
-        onChange={(e) => onChange('pan', e.target.value.toUpperCase())}
-        placeholder="ABCDE1234F"
-        maxLength={10}
-        className={inputClass}
-        required
-      />
-    </FormField>
+      <FormField label="PAN" required hint="ABCDE1234F" error={errors.pan}>
+        <input
+          type="text"
+          value={formData.pan}
+          onChange={(e) => onChange('pan', e.target.value.toUpperCase())}
+          placeholder="ABCDE1234F"
+          maxLength={10}
+          className={inputClass}
+        />
+      </FormField>
+    </div>
 
-    <FormField label="Business Name" required>
+    <FormField label="Business Name" required error={errors.businessName}>
       <input
         type="text"
         value={formData.businessName}
         onChange={(e) => onChange('businessName', e.target.value)}
-        placeholder="Registered business name"
+        placeholder="Kumar Traders Pvt. Ltd."
         className={inputClass}
-        required
       />
     </FormField>
 
-    <FormField label="Business Type" required>
-      <select
-        value={formData.businessType}
-        onChange={(e) => onChange('businessType', e.target.value)}
-        className={inputClass}
-        required
-      >
-        <option value="">Select business type</option>
-        {BUSINESS_TYPES.map((t) => (
-          <option key={t.value} value={t.value}>{t.label}</option>
-        ))}
-      </select>
-    </FormField>
+    <div className="grid grid-cols-2 gap-4">
+      <FormField label="Business Type" required error={errors.businessType}>
+        <select
+          value={formData.businessType}
+          onChange={(e) => onChange('businessType', e.target.value)}
+          className={inputClass}
+        >
+          <option value="">Select type</option>
+          {BUSINESS_TYPES.map((t) => (
+            <option key={t.value} value={t.value}>{t.label}</option>
+          ))}
+        </select>
+      </FormField>
 
-    <FormField label="Monthly Revenue (₹)" required>
-      <input
-        type="number"
-        value={formData.monthlyRevenue}
-        onChange={(e) => onChange('monthlyRevenue', e.target.value)}
-        placeholder="e.g. 150000"
-        min={1000}
-        className={inputClass}
-        required
-      />
-    </FormField>
+      <FormField label="Monthly Revenue (₹)" required error={errors.monthlyRevenue}>
+        <input
+          type="number"
+          value={formData.monthlyRevenue}
+          onChange={(e) => onChange('monthlyRevenue', e.target.value)}
+          placeholder="150000"
+          min={1000}
+          className={inputClass}
+        />
+      </FormField>
+    </div>
   </div>
 )
 

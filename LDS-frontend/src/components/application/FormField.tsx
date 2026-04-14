@@ -5,15 +5,17 @@ interface Props {
   children: ReactNode
   required?: boolean
   hint?: string
+  error?: string
 }
 
-const FormField = ({ label, children, required, hint }: Props) => (
-  <div className="space-y-1">
-    <label className="block text-sm font-medium text-gray-700">
-      {label} {required && <span className="text-red-500">*</span>}
+const FormField = ({ label, children, required, hint, error }: Props) => (
+  <div className="space-y-1.5">
+    <label className="block text-xs font-medium text-neutral-500 uppercase tracking-wider">
+      {label}{required && <span className="text-neutral-900 ml-0.5">*</span>}
     </label>
     {children}
-    {hint && <p className="text-xs text-gray-400">{hint}</p>}
+    {hint && !error && <p className="text-xs text-neutral-400">{hint}</p>}
+    {error && <p className="text-xs text-red-500">{error}</p>}
   </div>
 )
 

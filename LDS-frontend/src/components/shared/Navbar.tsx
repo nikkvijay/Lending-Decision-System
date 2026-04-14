@@ -1,12 +1,17 @@
 const Navbar = () => (
-  <nav className="bg-white border-b border-gray-200 px-4 py-3">
-    <div className="max-w-5xl mx-auto flex items-center gap-3">
-      <span className="font-bold text-gray-900 text-lg">Vitto</span>
-      <span className="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full font-medium">
-        LDS
+  <header className="border-b border-neutral-200 bg-white">
+    <div className="max-w-2xl mx-auto px-6 h-14 flex items-center justify-between">
+      <div className="flex items-center gap-2.5">
+        <div className="w-2 h-2 rounded-full bg-neutral-900" />
+        <span className="text-sm font-semibold tracking-tight text-neutral-900">
+          Vitto LDS
+        </span>
+      </div>
+      <span className="text-xs text-neutral-400 font-medium">
+        MSME Credit
       </span>
     </div>
-  </nav>
+  </header>
 )
 
 export default Navbar

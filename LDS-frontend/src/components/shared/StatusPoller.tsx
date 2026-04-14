@@ -1,22 +1,24 @@
-import Spinner from './Spinner'
 import { useApplication } from '@/contexts/ApplicationContext'
-
-const STATUS_MESSAGES: Record<string, string> = {
-  PENDING: 'Queued for review...',
-  PROCESSING: 'Analysing your application...',
-}
 
 const StatusPoller = () => {
   const { status } = useApplication()
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-10 flex flex-col items-center gap-5">
-      <Spinner size="lg" />
+    <div className="bg-white border border-neutral-200 rounded-xl p-10 flex flex-col items-center gap-5">
+      <div className="flex gap-1.5">
+        {[0, 1, 2].map((i) => (
+          <div
+            key={i}
+            className="w-1.5 h-1.5 rounded-full bg-neutral-900 animate-bounce"
+            style={{ animationDelay: `${i * 0.15}s` }}
+          />
+        ))}
+      </div>
       <div className="text-center">
-        <p className="font-medium text-gray-800">
-          {STATUS_MESSAGES[status] || 'Processing...'}
+        <p className="text-sm font-medium text-neutral-900">
+          {status === 'PROCESSING' ? 'Analysing application' : 'Queued for review'}
         </p>
-        <p className="text-sm text-gray-400 mt-1">This usually takes 1–3 seconds</p>
+        <p className="text-xs text-neutral-400 mt-1">Usually takes 1–3 seconds</p>
       </div>
     </div>
   )

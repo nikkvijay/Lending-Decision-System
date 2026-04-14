@@ -10,21 +10,30 @@ const Application = () => {
   useDecisionPoller()
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-neutral-50">
       <Navbar />
-      <div className="max-w-2xl mx-auto px-4 py-10">
-        <div className="mb-8 text-center">
-          <h1 className="text-3xl font-bold text-gray-900">Lending Decision System</h1>
-          <p className="text-gray-500 mt-2">MSME Business Loan Application</p>
-        </div>
+      <div className="max-w-2xl mx-auto px-6 py-12">
+        {!jobId && (
+          <div className="mb-8">
+            <p className="text-xs font-medium text-neutral-400 uppercase tracking-wider mb-1">
+              Loan Application
+            </p>
+            <h1 className="text-2xl font-semibold text-neutral-900 tracking-tight">
+              Business credit assessment
+            </h1>
+            <p className="text-sm text-neutral-400 mt-1">
+              Fill in your business details to receive an instant decision
+            </p>
+          </div>
+        )}
 
         {!jobId && <ApplicationForm />}
         {jobId && (status === 'PENDING' || status === 'PROCESSING') && <StatusPoller />}
         {jobId && (status === 'COMPLETED' || status === 'FAILED') && <DecisionResult />}
         {status === 'TIMEOUT' && (
-          <div className="text-center p-8 bg-white rounded-xl border border-gray-200">
-            <p className="text-red-500 font-medium">Decision is taking longer than expected.</p>
-            <p className="text-gray-400 text-sm mt-1">Please refresh and check back shortly.</p>
+          <div className="bg-white border border-neutral-200 rounded-xl p-8 text-center">
+            <p className="text-sm font-medium text-neutral-900">Decision taking longer than expected</p>
+            <p className="text-xs text-neutral-400 mt-1">Please refresh and try again shortly.</p>
           </div>
         )}
       </div>
