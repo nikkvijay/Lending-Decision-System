@@ -98,16 +98,18 @@ const AdminPanel = () => {
   const [stats, setStats] = useState<Stats | null>(null)
   const [filter, setFilter] = useState<Filter>('ALL')
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [expandedRow, setExpandedRow] = useState<string | null>(null)
 
   useEffect(() => {
     setLoading(true)
+    setError(null)
     Promise.all([getAdminApplications(filter), getAdminStats()])
       .then(([appsRes, statsRes]) => {
         setApps(appsRes.data.data)
         setStats(statsRes.data.data)
       })
-      .catch(console.error)
+      .catch((err) => setError(err.message || 'Failed to load data'))
       .finally(() => setLoading(false))
   }, [filter])
 
@@ -138,6 +140,13 @@ const AdminPanel = () => {
               value={stats.avg_score ?? '—'}
               sub="across completed"
             />
+          </div>
+        )}
+
+        {/* Error */}
+        {error && (
+          <div className="mb-4 px-4 py-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-600">
+            Failed to load data: {error}
           </div>
         )}
 

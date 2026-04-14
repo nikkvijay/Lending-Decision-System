@@ -77,6 +77,7 @@ const SuperAdminPanel = () => {
   const [stats, setStats] = useState<Stats | null>(null)
   const [auditLogs, setAuditLogs] = useState<AuditLog[]>([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     Promise.all([
@@ -89,7 +90,7 @@ const SuperAdminPanel = () => {
         setStats(statsRes.data.data)
         setAuditLogs(logsRes.data.data)
       })
-      .catch(console.error)
+      .catch((err) => setError(err.message || 'Failed to load data'))
       .finally(() => setLoading(false))
   }, [])
 
@@ -99,9 +100,7 @@ const SuperAdminPanel = () => {
     { key: 'audit',         label: `Audit Logs (${auditLogs.length})` },
   ]
 
-  const approvedApps  = apps.filter((a) => a.decision === 'APPROVED')
-  const rejectedApps  = apps.filter((a) => a.decision === 'REJECTED')
-  const scores        = apps.filter((a) => a.creditScore).map((a) => a.creditScore as number)
+  const scores = apps.filter((a) => a.creditScore).map((a) => a.creditScore as number)
   const maxScore      = scores.length ? Math.max(...scores) : null
   const minScore      = scores.length ? Math.min(...scores) : null
 
@@ -134,6 +133,12 @@ const SuperAdminPanel = () => {
             </button>
           ))}
         </div>
+
+        {error && (
+          <div className="mb-6 px-4 py-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-600">
+            Failed to load data: {error}
+          </div>
+        )}
 
         {loading ? (
           <div className="flex items-center justify-center py-20">
