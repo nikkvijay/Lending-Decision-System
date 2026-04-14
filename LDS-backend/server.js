@@ -1,6 +1,8 @@
+const dotenv = require('dotenv')
+dotenv.config()  // must be first — modules read env at load time
+
 const express = require('express')
 const cors = require('cors')
-const dotenv = require('dotenv')
 
 const connectDB = require('./src/config/db')
 const { connectPostgres } = require('./src/config/postgres')
@@ -9,8 +11,6 @@ const loanRoutes = require('./src/routes/loanRoutes')
 const decisionRoutes = require('./src/routes/decisionRoutes')
 const { errorMiddleware } = require('./src/middleware/errorMiddleware')
 const { generalRateLimiter } = require('./src/middleware/rateLimiter')
-
-dotenv.config()
 
 const app = express()
 const PORT = process.env.PORT || 5000
