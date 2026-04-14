@@ -12,7 +12,7 @@ const Application = () => {
   return (
     <div className="min-h-screen bg-neutral-50">
       <Navbar />
-      <div className="max-w-2xl mx-auto px-6 py-12">
+      <div className="max-w-xl mx-auto px-6 py-12">
         {!jobId && (
           <div className="mb-8">
             <p className="text-xs font-medium text-neutral-400 uppercase tracking-wider mb-1">

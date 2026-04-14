@@ -37,4 +37,13 @@ export const triggerDecision = (data: { loanId: string }) =>
 export const getDecisionStatus = (jobId: string) =>
   api.get(`/decisions/${jobId}/status`)
 
+// --- Admin ---
+export const getAdminApplications = (filter = 'ALL') =>
+  api.get(`/admin/applications?filter=${filter}`)
+
+export const getAdminStats = () => api.get('/admin/stats')
+
+export const getAdminAuditLogs = (limit = 50) =>
+  api.get(`/admin/audit-logs?limit=${limit}`)
+
 export default api

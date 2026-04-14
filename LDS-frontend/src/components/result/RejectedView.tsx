@@ -44,7 +44,7 @@ const RejectedView = ({ result, onReset }: Props) => (
       <div className="border-t border-neutral-100 pt-4">
         <button
           onClick={onReset}
-          className="w-full bg-neutral-900 text-white text-sm font-medium py-2.5 rounded-lg hover:bg-neutral-700 transition-colors"
+          className="w-full bg-blue-600 text-white text-sm font-medium py-2.5 rounded-lg hover:bg-blue-700 transition-colors"
         >
           Try again
         </button>

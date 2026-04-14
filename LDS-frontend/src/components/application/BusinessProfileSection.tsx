@@ -1,3 +1,4 @@
+import { ReactNode } from 'react'
 import FormField from './FormField'
 
 interface Props {
@@ -8,13 +9,28 @@ interface Props {
 
 const BUSINESS_TYPES = [
   { value: 'SOLE_PROPRIETORSHIP', label: 'Sole Proprietorship' },
-  { value: 'PARTNERSHIP', label: 'Partnership' },
-  { value: 'PRIVATE_LIMITED', label: 'Private Limited' },
-  { value: 'LLP', label: 'LLP' },
+  { value: 'PARTNERSHIP',         label: 'Partnership' },
+  { value: 'PRIVATE_LIMITED',     label: 'Private Limited' },
+  { value: 'LLP',                 label: 'LLP' },
 ]
 
 const inputClass =
-  'w-full bg-white border border-neutral-200 rounded-lg px-3 py-2.5 text-sm text-neutral-900 placeholder:text-neutral-400 focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900 transition-colors'
+  'w-full bg-white border border-neutral-200 rounded-lg px-3 py-2.5 text-sm text-neutral-900 placeholder:text-neutral-400 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors outline-none'
+
+const selectClass =
+  'w-full appearance-none bg-white border border-neutral-200 rounded-lg px-3 py-2.5 pr-9 text-sm text-neutral-900 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors outline-none cursor-pointer'
+
+const ChevronIcon = () => (
+  <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
+    <svg className="w-4 h-4 text-neutral-400" viewBox="0 0 20 20" fill="currentColor">
+      <path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clipRule="evenodd" />
+    </svg>
+  </div>
+)
+
+const SelectWrap = ({ children }: { children: ReactNode }) => (
+  <div className="relative">{children}<ChevronIcon /></div>
+)
 
 const BusinessProfileSection = ({ formData, onChange, errors }: Props) => (
   <div className="space-y-4">
@@ -34,7 +50,7 @@ const BusinessProfileSection = ({ formData, onChange, errors }: Props) => (
         />
       </FormField>
 
-      <FormField label="PAN" required hint="ABCDE1234F" error={errors.pan}>
+      <FormField label="PAN" required hint="Format: ABCDE1234F" error={errors.pan}>
         <input
           type="text"
           value={formData.pan}
@@ -59,16 +75,18 @@ const BusinessProfileSection = ({ formData, onChange, errors }: Props) => (
 
     <div className="grid grid-cols-2 gap-4">
       <FormField label="Business Type" required error={errors.businessType}>
-        <select
-          value={formData.businessType}
-          onChange={(e) => onChange('businessType', e.target.value)}
-          className={inputClass}
-        >
-          <option value="">Select type</option>
-          {BUSINESS_TYPES.map((t) => (
-            <option key={t.value} value={t.value}>{t.label}</option>
-          ))}
-        </select>
+        <SelectWrap>
+          <select
+            value={formData.businessType}
+            onChange={(e) => onChange('businessType', e.target.value)}
+            className={selectClass}
+          >
+            <option value="">Select type</option>
+            {BUSINESS_TYPES.map((t) => (
+              <option key={t.value} value={t.value}>{t.label}</option>
+            ))}
+          </select>
+        </SelectWrap>
       </FormField>
 
       <FormField label="Monthly Revenue (₹)" required error={errors.monthlyRevenue}>

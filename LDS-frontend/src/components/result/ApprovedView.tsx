@@ -32,7 +32,7 @@ const ApprovedView = ({ result, onReset }: Props) => (
       <div className="border-t border-neutral-100 pt-4">
         <button
           onClick={onReset}
-          className="w-full border border-neutral-200 text-neutral-700 text-sm font-medium py-2.5 rounded-lg hover:bg-neutral-50 transition-colors"
+          className="w-full bg-blue-600 text-white text-sm font-medium py-2.5 rounded-lg hover:bg-blue-700 transition-colors"
         >
           Start new application
         </button>
