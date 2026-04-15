@@ -8,5 +8,6 @@ dist/
 
 # Assessment docs (local only)
 *.pdf
+!write-up.pdf
 *.tex
 project details.txt
