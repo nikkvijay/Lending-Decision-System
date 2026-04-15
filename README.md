@@ -2,6 +2,14 @@
 
 An end-to-end MSME lending decision platform built for the Vitto SDE Full Stack Assessment. Accepts business profiles and loan requests, runs them through a custom credit scoring engine asynchronously, and returns a structured decision with credit score and reason codes.
 
+## Live Demo
+
+| Service | URL |
+|---------|-----|
+| Frontend | https://lending-decision-system-6mle.vercel.app |
+| Backend API | https://lending-decision-system-89cr.vercel.app/api |
+| Health check | https://lending-decision-system-89cr.vercel.app/api/health |
+
 ## Stack
 
 | Layer | Tech |
@@ -37,12 +45,36 @@ Lending Decision System/
 
 ## Quick Start
 
-### Prerequisites
-- Node.js 18+
-- A Neon (or any PostgreSQL) database
-- A MongoDB Atlas (or local MongoDB) instance
+### Option 1 — Docker Compose (recommended)
 
-### Backend
+Requires Docker and Docker Compose.
+
+```bash
+git clone https://github.com/nikkvijay/Lending-Decision-System.git
+cd "Lending Decision System"
+docker compose up --build
+```
+
+Services start at:
+- Frontend → http://localhost:5173
+- Backend API → http://localhost:5000/api
+- PostgreSQL → localhost:5432
+- MongoDB → localhost:27017
+
+Migrations run automatically on first boot. Then seed the admin users:
+
+```bash
+docker compose exec api node seed.js
+```
+
+### Option 2 — Manual Setup
+
+#### Prerequisites
+- Node.js 18+
+- PostgreSQL (Neon, Supabase, or local)
+- MongoDB (Atlas or local)
+
+#### Backend
 
 ```bash
 cd LDS-backend
@@ -61,8 +93,9 @@ npm run dev              # starts on port 5000
 | `JWT_SECRET` | Long random string for signing tokens |
 | `FRONTEND_URL` | Frontend origin for CORS in production |
 | `NODE_ENV` | `development` or `production` |
+| `POSTGRES_SSL` | Set to `false` for local/Docker, omit for cloud |
 
-### Frontend
+#### Frontend
 
 ```bash
 cd LDS-frontend
@@ -188,12 +221,22 @@ Frontend polls with progressive backoff: 1s → 1.5s → 2s → 2.5s → 3s → 
 
 ## Deployment
 
-The backend is configured for Vercel (`vercel.json` present). Set these environment variables in Vercel dashboard before deploying:
+Both services are deployed on Vercel. Each is a separate Vercel project pointing at the same GitHub repository root with a different `Root Directory` setting.
 
-- `DATABASE_URL` — Neon connection string
-- `MONGODB_URI` — Atlas connection string  
-- `JWT_SECRET` — random secret
-- `FRONTEND_URL` — deployed frontend URL
-- `NODE_ENV=production`
+### Backend (`LDS-backend/`)
 
-After backend is deployed, set `VITE_API_URL` in the frontend Vercel project to the backend URL.
+Set these environment variables in the Vercel project dashboard:
+
+| Variable | Value |
+|----------|-------|
+| `DATABASE_URL` | Neon PostgreSQL connection string |
+| `MONGODB_URI` | MongoDB Atlas connection string |
+| `JWT_SECRET` | Long random secret |
+| `FRONTEND_URL` | Frontend Vercel URL |
+| `NODE_ENV` | `production` |
+
+### Frontend (`LDS-frontend/`)
+
+| Variable | Value |
+|----------|-------|
+| `VITE_API_URL` | Backend Vercel URL + `/api` |

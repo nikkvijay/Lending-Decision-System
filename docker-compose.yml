@@ -1,0 +1,67 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: lending_decision_db
+      POSTGRES_USER: lds_user
+      POSTGRES_PASSWORD: lds_pass
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U lds_user -d lending_decision_db']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  mongo:
+    image: mongo:7
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: ['CMD', 'mongosh', '--eval', "db.adminCommand('ping')"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build:
+      context: ./LDS-backend
+      dockerfile: Dockerfile
+    ports:
+      - '5000:5000'
+    environment:
+      PORT: 5000
+      NODE_ENV: development
+      DATABASE_URL: postgresql://lds_user:lds_pass@postgres:5432/lending_decision_db
+      POSTGRES_SSL: 'false'
+      MONGODB_URI: mongodb://mongo:27017/lending_decision_db
+      JWT_SECRET: local-dev-secret-change-in-production
+      JWT_EXPIRES_IN: 24h
+      FRONTEND_URL: http://localhost:5173
+    depends_on:
+      postgres:
+        condition: service_healthy
+      mongo:
+        condition: service_healthy
+    restart: on-failure
+
+  frontend:
+    build:
+      context: ./LDS-frontend
+      dockerfile: Dockerfile
+    ports:
+      - '5173:5173'
+    environment:
+      VITE_API_URL: http://localhost:5000/api
+    depends_on:
+      - api
+
+volumes:
+  postgres_data:
+  mongo_data:

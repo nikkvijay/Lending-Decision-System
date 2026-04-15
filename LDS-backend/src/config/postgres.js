@@ -2,7 +2,8 @@ const { Pool } = require('pg')
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false },  // required for Neon
+  // SSL required for cloud providers (Neon, Supabase); disabled for local Docker
+  ssl: process.env.POSTGRES_SSL === 'false' ? false : { rejectUnauthorized: false },
 })
 
 const connectPostgres = async () => {
