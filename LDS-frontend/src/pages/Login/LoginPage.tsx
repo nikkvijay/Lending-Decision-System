@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import type { FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { loginUser } from '@/api'
 
@@ -10,7 +9,7 @@ const LoginPage = () => {
   const [error, setError]       = useState<string | null>(null)
   const [loading, setLoading]   = useState(false)
 
-  const handleSubmit = async (e: FormEvent) => {
+  const handleSubmit = async (e: { preventDefault(): void }) => {
     e.preventDefault()
     if (!username.trim() || !password) {
       setError('Username and password are required')
@@ -27,7 +26,7 @@ const LoginPage = () => {
       localStorage.setItem('lds_token', token)
       localStorage.setItem('lds_user', JSON.stringify(user))
 
-      navigate(user.role === 'superadmin' ? '/superadmin' : '/admin', { replace: true })
+      await navigate(user.role === 'superadmin' ? '/superadmin' : '/admin', { replace: true })
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Login failed')
     } finally {

@@ -98,9 +98,15 @@ const SuperAdminPanel = () => {
         setStats(statsRes.data.data)
         setAuditLogs(logsRes.data.data)
       })
-      .catch((err) => setError(err.message || 'Failed to load data'))
+      .catch((err) => {
+        if (err.message?.toLowerCase().includes('token') || err.message?.toLowerCase().includes('unauthorized') || err.message?.toLowerCase().includes('authentication')) {
+          navigate('/login', { replace: true })
+          return
+        }
+        setError(err.message || 'Failed to load data')
+      })
       .finally(() => setLoading(false))
-  }, [])
+  }, [navigate])
 
   const TABS: { key: Tab; label: string }[] = [
     { key: 'overview',      label: 'Overview' },

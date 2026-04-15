@@ -16,11 +16,10 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     const message = error.response?.data?.error?.message || 'Something went wrong'
-    // Token expired or invalid — clear and redirect to login
+    
     if (error.response?.status === 401) {
       localStorage.removeItem('lds_token')
       localStorage.removeItem('lds_user')
-      window.location.href = '/login'
     }
     return Promise.reject(new Error(message))
   }

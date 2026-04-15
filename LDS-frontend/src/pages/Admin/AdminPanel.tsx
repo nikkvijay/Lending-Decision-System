@@ -118,9 +118,15 @@ const AdminPanel = () => {
         setApps(appsRes.data.data)
         setStats(statsRes.data.data)
       })
-      .catch((err) => setError(err.message || 'Failed to load data'))
+      .catch((err) => {
+        if (err.message?.toLowerCase().includes('token') || err.message?.toLowerCase().includes('unauthorized') || err.message?.toLowerCase().includes('authentication')) {
+          navigate('/login', { replace: true })
+          return
+        }
+        setError(err.message || 'Failed to load data')
+      })
       .finally(() => setLoading(false))
-  }, [filter])
+  }, [filter, navigate])
 
   return (
     <div className="min-h-screen bg-neutral-50">
